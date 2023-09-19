@@ -1,4 +1,4 @@
-function [G, A,S, Loss] = LSTD_aaai(X, index, gt, param)
+function [G] = ETLSRR(X, index, gt, param)
 %   min    alpha*|A|_{t*} + beta*|S|_1 + delta*|C|_{t1} + |E|_{2,1} 
 %   s.t.  Xi = Xi*Zi + E^i , O'ZiO' = Bi+Si, A = B, B=C
 %
@@ -118,26 +118,16 @@ for iter = 1:MAX_iter
  
     rho = min(1e6, dt*rho);
     
-%     loss1(iter) = norm(RR, inf);
-%     loss2(iter) = norm(H-H*Q{num_view+1}-E2,inf);
-%     loss3(iter) = norm(RR2, inf);
-%     loss4(iter) = norm(RR3, inf);
-%     loss5(iter) = norm(RR4, inf);
     thrsh = 1e-5;
     if(norm(RR1, inf)<thrsh && norm(RR2, inf)<thrsh && norm(RR3, inf)<thrsh )
         break;
     end
   
-    loss1(iter) = norm(RR1, inf);     loss2(iter) = norm(RR2, inf);
-    RR1 = [];RR2=[]; RR3=[];RR4=[];
 end
 
 KK=0;
  for i=1:num_view
     KK = KK + (abs(A{i})+(abs(A{i}))');
-    %KK = KK + A{i}+(A{i})';
  end
 G = KK/2/num_view; 
-Loss= [loss1; loss2];
-
 end
